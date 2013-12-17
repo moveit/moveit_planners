@@ -328,12 +328,12 @@ void ompl_interface::ModelBasedPlanningContext::setCompleteInitialState(const ro
 void ompl_interface::ModelBasedPlanningContext::clear()
 {
   ompl_simple_setup_.clear();
-  ompl_simple_setup_.clearStartStates();
-  ompl_simple_setup_.setGoal(ob::GoalPtr());
-  ompl_simple_setup_.setStateValidityChecker(ob::StateValidityCheckerPtr());
-  path_constraints_.reset();
-  goal_constraints_.clear();
-  getOMPLStateSpace()->setInterpolationFunction(InterpolationFunction());
+  //ompl_simple_setup_.clearStartStates();
+  //ompl_simple_setup_.setGoal(ob::GoalPtr());
+  //ompl_simple_setup_.setStateValidityChecker(ob::StateValidityCheckerPtr());
+  //path_constraints_.reset();
+  //goal_constraints_.clear();
+  //getOMPLStateSpace()->setInterpolationFunction(InterpolationFunction());
 }
 
 bool ompl_interface::ModelBasedPlanningContext::setPathConstraints(const moveit_msgs::Constraints &path_constraints,
