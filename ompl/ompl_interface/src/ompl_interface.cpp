@@ -95,7 +95,7 @@ void ompl_interface::OMPLInterface::setPlannerConfigurations(const planning_inte
 }
 
 ompl_interface::ModelBasedPlanningContextPtr ompl_interface::OMPLInterface::getPlanningContext(const planning_scene::PlanningSceneConstPtr& planning_scene,
-                                                                                               const planning_interface::MotionPlanRequest &req) const
+                                                                                               const planning_interface::MotionPlanRequest &req) 
 {
   moveit_msgs::MoveItErrorCodes dummy;
   return getPlanningContext(planning_scene, req, dummy);
@@ -103,15 +103,16 @@ ompl_interface::ModelBasedPlanningContextPtr ompl_interface::OMPLInterface::getP
 
 ompl_interface::ModelBasedPlanningContextPtr ompl_interface::OMPLInterface::getPlanningContext(const planning_scene::PlanningSceneConstPtr& planning_scene,
                                                                                                const planning_interface::MotionPlanRequest &req,
-                                                                                               moveit_msgs::MoveItErrorCodes &error_code) const
+                                                                                               moveit_msgs::MoveItErrorCodes &error_code) 
 {
+  loadPlannerConfigurations();
   ModelBasedPlanningContextPtr ctx = context_manager_.getPlanningContext(planning_scene, req, error_code);
   if (ctx)
     configureContext(ctx);
   return ctx;
 }
 
-ompl_interface::ModelBasedPlanningContextPtr ompl_interface::OMPLInterface::getPlanningContext(const std::string &config, const std::string &factory_type) const
+ompl_interface::ModelBasedPlanningContextPtr ompl_interface::OMPLInterface::getPlanningContext(const std::string &config, const std::string &factory_type) 
 {
   ModelBasedPlanningContextPtr ctx = context_manager_.getPlanningContext(config, factory_type);
   if (ctx)
@@ -129,7 +130,7 @@ void ompl_interface::OMPLInterface::configureContext(const ModelBasedPlanningCon
 }
 
 bool ompl_interface::OMPLInterface::solve(const planning_scene::PlanningSceneConstPtr& planning_scene,
-                                          const planning_interface::MotionPlanRequest &req, planning_interface::MotionPlanResponse &res) const
+                                          const planning_interface::MotionPlanRequest &req, planning_interface::MotionPlanResponse &res) 
 {
   moveit::tools::Profiler::ScopedStart pslv;
   moveit::tools::Profiler::ScopedBlock sblock("OMPLInterface:Solve");
@@ -145,7 +146,7 @@ bool ompl_interface::OMPLInterface::solve(const planning_scene::PlanningSceneCon
 }
 
 bool ompl_interface::OMPLInterface::solve(const planning_scene::PlanningSceneConstPtr& planning_scene,
-                      const planning_interface::MotionPlanRequest &req, planning_interface::MotionPlanDetailedResponse &res) const
+                      const planning_interface::MotionPlanRequest &req, planning_interface::MotionPlanDetailedResponse &res) 
 {
   moveit::tools::Profiler::ScopedStart pslv;
   moveit::tools::Profiler::ScopedBlock sblock("OMPLInterface:Solve");

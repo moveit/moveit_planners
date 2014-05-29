@@ -80,19 +80,19 @@ public:
 
   /** @brief Solve the planning problem */
   bool solve(const planning_scene::PlanningSceneConstPtr& planning_scene,
-             const planning_interface::MotionPlanRequest &req, planning_interface::MotionPlanResponse &res) const;
+             const planning_interface::MotionPlanRequest &req, planning_interface::MotionPlanResponse &res) ;
 
   /** @brief Solve the planning problem but give a more detailed response */
   bool solve(const planning_scene::PlanningSceneConstPtr& planning_scene,
-             const planning_interface::MotionPlanRequest &req, planning_interface::MotionPlanDetailedResponse &res) const;
+             const planning_interface::MotionPlanRequest &req, planning_interface::MotionPlanDetailedResponse &res) ;
 
   ModelBasedPlanningContextPtr getPlanningContext(const planning_scene::PlanningSceneConstPtr& planning_scene,
-                                                  const planning_interface::MotionPlanRequest &req) const;
+                                                  const planning_interface::MotionPlanRequest &req) ;
   ModelBasedPlanningContextPtr getPlanningContext(const planning_scene::PlanningSceneConstPtr& planning_scene,
                                                   const planning_interface::MotionPlanRequest &req,
-                                                  moveit_msgs::MoveItErrorCodes &error_code) const;
+                                                  moveit_msgs::MoveItErrorCodes &error_code) ;
 
-  ModelBasedPlanningContextPtr getPlanningContext(const std::string &config, const std::string &factory_type = "") const;
+  ModelBasedPlanningContextPtr getPlanningContext(const std::string &config, const std::string &factory_type = "") ;
 
   ModelBasedPlanningContextPtr getLastPlanningContext() const
   {
@@ -176,7 +176,7 @@ protected:
   ModelBasedPlanningContextPtr prepareForSolve(const planning_interface::MotionPlanRequest &req,
                                                const planning_scene::PlanningSceneConstPtr& planning_scene,
                                                moveit_msgs::MoveItErrorCodes *error_code,
-                                               unsigned int *attempts, double *timeout) const;
+                                               unsigned int *attempts, double *timeout) ;
 
 
   ros::NodeHandle nh_; /// The ROS node handle
