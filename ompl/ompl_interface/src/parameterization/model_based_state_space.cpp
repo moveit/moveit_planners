@@ -154,7 +154,7 @@ double ompl_interface::getMeasure() const
     {
         const JointModel::Bounds& bounds = *spec_.joint_bounds_[i];
         for (std::size_t j = 0 ; j < bounds.size() ; ++j)
-            m *= bounds[j].max_position_ - sbounds[j].min_position_;
+            m *= bounds[j].max_position_ - bounds[j].min_position_;
         }
     }
     return m;
