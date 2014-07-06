@@ -2,6 +2,13 @@
 Changelog for package moveit_planners_ompl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix for getMeasure() virtual function OMPL change
+* Move OMPL paths before catkin to avoid compilation against ROS OMPL package when specifying a different OMPL installation
+* Fixed bug which limited the number of plans considered to the number of threads.
+* Contributors: Chris Lewis, Dave Coleman, Ryan Luna
+
 0.5.5 (2014-03-22)
 ------------------
 * update build system for ROS indigo
