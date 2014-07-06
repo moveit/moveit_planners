@@ -2,8 +2,8 @@
 Changelog for package moveit_planners_ompl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.6 (2014-07-06)
+------------------
 * Fix for getMeasure() virtual function OMPL change
 * Move OMPL paths before catkin to avoid compilation against ROS OMPL package when specifying a different OMPL installation
 * Fixed bug which limited the number of plans considered to the number of threads.
