@@ -90,7 +90,12 @@ bool ompl_interface::ConstrainedGoalSampler::sampleUsingConstraintSampler(const 
     
     if (constraint_sampler_)
     {
-      if (constraint_sampler_->project(work_state_, planning_context_->getMaximumStateSamplingAttempts()))
+      // if set to true, then the workstate is the seed, else it is randomized
+      bool use_workstate_as_seed = false;
+      if(a==0)
+        use_workstate_as_seed = true;
+
+      if (constraint_sampler_->project(work_state_, planning_context_->getMaximumStateSamplingAttempts(), use_workstate_as_seed))
       {
         work_state_.update();
         if (kinematic_constraint_set_->decide(work_state_, verbose).satisfied)
