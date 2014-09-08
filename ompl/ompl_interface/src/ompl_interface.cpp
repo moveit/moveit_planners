@@ -128,38 +128,6 @@ void ompl_interface::OMPLInterface::configureContext(const ModelBasedPlanningCon
   context->simplifySolutions(simplify_solutions_);
 }
 
-bool ompl_interface::OMPLInterface::solve(const planning_scene::PlanningSceneConstPtr& planning_scene,
-                                          const planning_interface::MotionPlanRequest &req, planning_interface::MotionPlanResponse &res) const
-{
-  moveit::tools::Profiler::ScopedStart pslv;
-  moveit::tools::Profiler::ScopedBlock sblock("OMPLInterface:Solve");
-
-  ModelBasedPlanningContextPtr context = getPlanningContext(planning_scene, req);
-  if (context)
-  {
-    context->clear();
-    return context->solve(res);
-  }
-  else
-    return false;
-}
-
-bool ompl_interface::OMPLInterface::solve(const planning_scene::PlanningSceneConstPtr& planning_scene,
-                      const planning_interface::MotionPlanRequest &req, planning_interface::MotionPlanDetailedResponse &res) const
-{
-  moveit::tools::Profiler::ScopedStart pslv;
-  moveit::tools::Profiler::ScopedBlock sblock("OMPLInterface:Solve");
-
-  ModelBasedPlanningContextPtr context = getPlanningContext(planning_scene, req);
-  if (context)
-  {
-    context->clear();
-    return context->solve(res);
-  }
-  else
-    return false;
-}
-
 void ompl_interface::OMPLInterface::loadConstraintApproximations(const std::string &path)
 {
   constraints_library_->loadConstraintApproximations(path);
@@ -311,10 +279,10 @@ void ompl_interface::OMPLInterface::loadPlannerConfigurations()
   for(planning_interface::PlannerConfigurationMap::iterator it = pconfig.begin();
       it != pconfig.end(); ++it)
   {
-    ROS_DEBUG_STREAM("Parameters for configuration '"<< it->first << "'");
+    ROS_DEBUG_STREAM_NAMED("parameters","Parameters for configuration '"<< it->first << "'");
     for (std::map<std::string, std::string>::const_iterator config_it = it->second.config.begin() ;
          config_it != it->second.config.end() ; ++config_it)
-      ROS_DEBUG_STREAM(" - " << config_it->first << " = " << config_it->second);
+      ROS_DEBUG_STREAM_NAMED("parameters"," - " << config_it->first << " = " << config_it->second);
   }
   setPlannerConfigurations(pconfig);
 }
