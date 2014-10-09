@@ -52,9 +52,13 @@ ompl_interface::StateValidityChecker::StateValidityChecker(const ModelBasedPlann
   collision_request_with_distance_.distance = true;
   collision_request_with_cost_.cost = true;
 
-  collision_request_simple_.group_name = planning_context_->getGroupName();
-  collision_request_with_distance_.group_name = planning_context_->getGroupName();
-  collision_request_with_cost_.group_name = planning_context_->getGroupName();
+  // If we set a group name in the collision request, it only checks
+  // the links in that group for collisions.  Generally we care if
+  // anything is colliding, for instance attached objects,
+  // end-effectors, etc.
+  collision_request_simple_.group_name = "";
+  collision_request_with_distance_.group_name = "";
+  collision_request_with_cost_.group_name = "";
 
   collision_request_simple_verbose_ = collision_request_simple_;
   collision_request_simple_verbose_.verbose = true;
