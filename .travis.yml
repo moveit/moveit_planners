@@ -41,31 +41,32 @@ before_script:
   - wstool merge https://raw.github.com/ros-planning/moveit_docs/$CI_ROS_DISTRO-devel/moveit.rosinstall
   # download moveit repos, except $REPOSITORY_NAME
   - wstool rm $REPOSITORY_NAME
-  - wstool update
+#  - wstool update
   # link in the repo we are testing
   - ln -s $TRAVIS_BUILD_DIR $REPOSITORY_NAME
   - cd ../
   # use rosdep to install all dependencies (including ROS itself)
-  - sudo rosdep init
-  - rosdep update
-  - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO
+#  - sudo rosdep init
+#  - rosdep update
+#  - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO
 
   ### prepare catkin workspace to test $REPOSITORY_NAME
-  - echo $TRAVIS_BUILD_DIR $UNDERLAY $OVERLAY
   - mkdir -p $OVERLAY/src
   - ln -s $TRAVIS_BUILD_DIR $OVERLAY/src
+
+  - echo $TRAVIS_BUILD_DIR $UNDERLAY $OVERLAY
+  - ls $UNDERLAY/src
+  - ls $OVERLAY/src
 
 script:
   ### build all MoveIt packages
   - cd $UNDERLAY
-  - catkin init --reset --workspace src
   - catkin config --extend /opt/ros/$CI_ROS_DISTRO --install --cmake-args -DCMAKE_BUILD_TYPE=Release
-  - catkin build --no-summary --no-notify
+  - catkin build catkin build -i -v --summarize --no-status
   - cd ../
 
   ### build and run tests only on $REPOSITORY_NAME
   - cd $OVERLAY
-  - catkin init --reset --workspace src
   - catkin config --extend $UNDERLAY/install --cmake-args -DCMAKE_BUILD_TYPE=Release
   # Build tests
   - catkin build --no-summary --no-notify
