@@ -11,9 +11,6 @@ python:
 compiler:
   - gcc
 env:
-  global:
-    - UNDERLAY=~/moveit
-    - OVERLAY=~/overlay
   matrix:
     - CI_ROS_DISTRO="indigo"
 #    - CI_ROS_DISTRO="jade"
@@ -36,8 +33,8 @@ install:
 before_script:
   ### prepare catkin workspace to build MoveIt repos
   - export REPOSITORY_NAME=${PWD##*/}
-  - mkdir -p $UNDERLAY/src
-  - cd $UNDERLAY/src
+  - mkdir -p underlay/src
+  - cd underlay/src
   - wstool init .
   - wstool merge https://raw.github.com/ros-planning/moveit_docs/$CI_ROS_DISTRO-devel/moveit.rosinstall
   # download moveit repos, except $REPOSITORY_NAME
@@ -52,20 +49,21 @@ before_script:
   - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO
 
   ### prepare catkin workspace to test $REPOSITORY_NAME
-  - mkdir -p $OVERLAY/src
-  - ln -s $CI_SOURCE_PATH $OVERLAY/src
+  - mkdir -p overlay/src
+  - ln -s $CI_SOURCE_PATH overlay/src
 
 script:
   ### build all MoveIt packages
-  - cd $UNDERLAY
+  - cd underlay
   - catkin init --reset --workspace src
   - catkin config --extend /opt/ros/$CI_ROS_DISTRO --install --cmake-args -DCMAKE_BUILD_TYPE=Release
   - catkin build --no-summary --no-notify
+  - cd ../
 
   ### build and run tests only on $REPOSITORY_NAME
-  - cd $OVERLAY
+  - cd overlay
   - catkin init --reset --workspace src
-  - catkin config --extend $UNDERLAY/install --cmake-args -DCMAKE_BUILD_TYPE=Release
+  - catkin config --extend underlay/install --cmake-args -DCMAKE_BUILD_TYPE=Release
   # Build tests
   - catkin build --no-summary --no-notify
   - catkin build --no-summary --no-notify --make-args tests
