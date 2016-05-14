@@ -1,6 +1,6 @@
 # Generic MoveIt Travis Continuous Integration Configuration File
 # Works with all MoveIt! repositories/branches
-# Author: Dave Coleman, Jonathan Bohren
+# Author: Dave Coleman, Jonathan Bohren, Robert Haschke
 sudo: required
 dist: trusty
 language:
@@ -12,8 +12,8 @@ compiler:
   - gcc
 env:
   global:
-    - CATKIN_WS=~/catkin_ws
-    - CATKIN_WS_SRC=${CATKIN_WS}/src
+    - UNDERLAY=~/moveit
+    - OVERLAY=~/overlay
   matrix:
     - CI_ROS_DISTRO="indigo"
 #    - CI_ROS_DISTRO="jade"
@@ -33,10 +33,11 @@ install:
   - sudo apt-get remove -y mongodb mongodb-10gen || true
   - sudo apt-get install -y mongodb-clients mongodb-server -o Dpkg::Options::="--force-confdef" # default actions
 
-before_script: # prepare catkin workspace
+before_script:
+  ### prepare catkin workspace to build MoveIt repos
   - export REPOSITORY_NAME=${PWD##*/}
-  - mkdir -p $CATKIN_WS_SRC
-  - cd $CATKIN_WS_SRC
+  - mkdir -p $UNDERLAY/src
+  - cd $UNDERLAY/src
   - wstool init .
   - wstool merge https://raw.github.com/ros-planning/moveit_docs/$CI_ROS_DISTRO-devel/moveit.rosinstall
   # download moveit repos, except $REPOSITORY_NAME
@@ -50,14 +51,23 @@ before_script: # prepare catkin workspace
   - rosdep update
   - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO
 
+  ### prepare catkin workspace to test $REPOSITORY_NAME
+  - mkdir -p $OVERLAY/src
+  - ln -s $CI_SOURCE_PATH $OVERLAY/src
+
 script:
-  - catkin init --reset --workspace $CATKIN_WS_SRC
-  - catkin config --extend /opt/ros/$CI_ROS_DISTRO --cmake-args -DCMAKE_BUILD_TYPE=Release
-  # Enable install space
-  #- catkin config --install
-  # Build [and Install] packages
+  ### build all MoveIt packages
+  - cd $UNDERLAY
+  - catkin init --reset --workspace src
+  - catkin config --extend /opt/ros/$CI_ROS_DISTRO --install --cmake-args -DCMAKE_BUILD_TYPE=Release
   - catkin build --no-summary --no-notify
+
+  ### build and run tests only on $REPOSITORY_NAME
+  - cd $OVERLAY
+  - catkin init --reset --workspace src
+  - catkin config --extend $UNDERLAY/install --cmake-args -DCMAKE_BUILD_TYPE=Release
   # Build tests
+  - catkin build --no-summary --no-notify
   - catkin build --no-summary --no-notify --make-args tests
   # Run tests
   - catkin run_tests
